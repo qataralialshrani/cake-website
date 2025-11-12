@@ -1,283 +1,160 @@
-/* التنسيقات العامة */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+// تنفيذ التنقل السلس
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetSection = document.querySelector(targetId);
+        const navHeight = document.querySelector('.navbar').offsetHeight;
+        
+        window.scrollTo({
+            top: targetSection.offsetTop - navHeight,
+            behavior: 'smooth'
+        });
+    });
+});
+
+// إضافة تأثير التمرير لشريط التنقل
+window.addEventListener('scroll', function() {
+    const navbar = document.querySelector('.navbar');
+    if (window.scrollY > 100) {
+        navbar.style.background = 'rgba(139, 69, 19, 0.95)';
+    } else {
+        navbar.style.background = 'linear-gradient(135deg, #8B4513 0%, #D2691E 100%)';
+    }
+});
+
+// نظام الحجز والدفع
+const bookingForm = document.getElementById('bookingForm');
+const paymentStep = document.getElementById('paymentStep');
+const ibanDisplay = document.getElementById('ibanDisplay');
+const showIbanBtn = document.getElementById('showIban');
+const submitBookingBtn = document.getElementById('submitBooking');
+const bookingModal = document.getElementById('bookingModal');
+const closeModal = document.querySelector('.close');
+const newBookingBtn = document.getElementById('newBooking');
+
+// بيانات الآيبان (مخفية بشكل جزئي)
+const fullIban = 'SA6305000068206733958000';
+const maskedIban = 'SA63 0500 0068 2067 3395 8000';
+let isIbanVisible = false;
+
+// تهيئة QR Code
+function generateQRCode() {
+    const qrElement = document.getElementById('qrcode');
+    qrElement.innerHTML = '';
+    
+    QRCode.toCanvas(qrElement, fullIban, {
+        width: 200,
+        height: 200,
+        colorDark: "#8B4513",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    }, function(error) {
+        if (error) {
+            console.error(error);
+            qrElement.innerHTML = '<p>تعذر إنشاء QR Code</p>';
+        }
+    });
 }
 
-body {
-    font-family: 'Cairo', sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #fff;
-}
+// إظهار/إخفاء رقم الآيبان
+showIbanBtn.addEventListener('click', function() {
+    isIbanVisible = !isIbanVisible;
+    ibanDisplay.textContent = isIbanVisible ? fullIban : maskedIban;
+});
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-/* شريط التنقل */
-.navbar {
-    background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
-    padding: 1rem 0;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.nav-logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #FFD700;
-}
-
-.nav-menu {
-    display: flex;
-    list-style: none;
-    gap: 2rem;
-}
-
-.nav-link {
-    color: white;
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s;
-}
-
-.nav-link:hover {
-    color: #FFD700;
-}
-
-/* قسم الهيرو */
-.hero {
-    background: linear-gradient(rgba(139, 69, 19, 0.7), rgba(210, 105, 30, 0.7)), url('assets/images/hero-bg.jpg');
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
-    padding-top: 80px;
-}
-
-.hero-content h1 {
-    font-size: 3.5rem;
-    margin-bottom: 1rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
-
-.hero-content p {
-    font-size: 1.3rem;
-    margin-bottom: 2rem;
-}
-
-.cta-button {
-    display: inline-block;
-    background: #FFD700;
-    color: #8B4513;
-    padding: 12px 30px;
-    text-decoration: none;
-    border-radius: 25px;
-    font-weight: bold;
-    transition: all 0.3s;
-}
-
-.cta-button:hover {
-    background: #FFC400;
-    transform: translateY(-2px);
-}
-
-/* قسم عن المحل */
-.about {
-    padding: 80px 0;
-    background: #f8f8f8;
-}
-
-.about h2 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: #8B4513;
-}
-
-.about-content {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-}
-
-.features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.feature {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.feature h3 {
-    color: #D2691E;
-    margin-bottom: 1rem;
-}
-
-/* قسم الكيك */
-.cakes {
-    padding: 80px 0;
-}
-
-.cakes h2 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: #8B4513;
-}
-
-.cakes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-}
-
-.cake-card {
-    background: white;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
-}
-
-.cake-card:hover {
-    transform: translateY(-10px);
-}
-
-.cake-image {
-    height: 250px;
-    background-size: cover;
-    background-position: center;
-}
-
-.cake-info {
-    padding: 1.5rem;
-}
-
-.cake-info h3 {
-    color: #8B4513;
-    margin-bottom: 0.5rem;
-}
-
-.cake-info p {
-    color: #666;
-}
-
-/* قسم التواصل */
-.contact {
-    padding: 80px 0;
-    background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
-    color: white;
-}
-
-.contact h2 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-}
-
-.contact-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-}
-
-.phone-number {
-    display: inline-block;
-    font-size: 1.5rem;
-    color: #FFD700;
-    text-decoration: none;
-    margin: 1rem 0;
-    font-weight: bold;
-}
-
-.contact-features p {
-    margin: 0.5rem 0;
-}
-
-.contact-form {
-    background: rgba(255,255,255,0.1);
-    padding: 2rem;
-    border-radius: 10px;
-    backdrop-filter: blur(10px);
-}
-
-.contact-form input,
-.contact-form textarea {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 5px;
-    background: rgba(255,255,255,0.9);
-}
-
-.contact-form button {
-    background: #FFD700;
-    color: #8B4513;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s;
-}
-
-.contact-form button:hover {
-    background: #FFC400;
-}
-
-/* الفوتر */
-.footer {
-    background: #333;
-    color: white;
-    text-align: center;
-    padding: 2rem 0;
-}
-
-/* التجاوب مع الشاشات الصغيرة */
-@media (max-width: 768px) {
-    .nav-menu {
-        flex-direction: column;
-        gap: 1rem;
+// **النموذج المعدل: وظيفة "تابع إلى الدفع"**
+// الآن نقوم بإرسال النموذج إلى Formspree أولاً، ثم ننتقل لخطوة الدفع
+document.getElementById('submitBookingDetails').addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    const cakeSelect = document.getElementById('cakeSelect');
+    const cakeTypeInput = document.getElementById('formCakeType');
+    
+    if (!cakeSelect.value) {
+        alert('الرجاء اختيار نوع الكيك');
+        return;
     }
     
-    .hero-content h1 {
-        font-size: 2.5rem;
+    // تحديث القيمة المخفية لنوع الكيك قبل الإرسال
+    cakeTypeInput.value = cakeSelect.value;
+    
+    // إرسال بيانات الحجز إلى Formspree
+    document.getElementById('bookingForm').submit();
+    
+    // إظهار قسم الدفع
+    paymentStep.style.display = 'block';
+    generateQRCode();
+    
+    // التمرير إلى قسم الدفع
+    paymentStep.scrollIntoView({ behavior: 'smooth' });
+});
+
+// **تأكيد الحجز (تم تعديل وظيفته ليصبح مجرد تأكيد بصري)**
+submitBookingBtn.addEventListener('click', function() {
+    const receiptFile = document.getElementById('paymentReceipt').files[0];
+    
+    if (!receiptFile) {
+        alert('الرجاء رفع إيصال الدفع');
+        return;
     }
     
-    .contact-content {
-        grid-template-columns: 1fr;
-    }
+    const customerName = document.getElementById('customerName').value;
+    const cakeType = document.getElementById('cakeSelect').value;
     
-    .features {
-        grid-template-columns: 1fr;
+    // عرض تأكيد الحجز
+    document.getElementById('confirmationMessage').textContent = 
+        `شكراً ${customerName}! تم استلام حجزك لـ ${cakeType}. سنتواصل معك خلال 24 ساعة. (إيصال الدفع يتم حفظه لديك حاليًا)`;
+    
+    bookingModal.style.display = 'block';
+});
+
+// إغلاق المودال
+closeModal.addEventListener('click', function() {
+    bookingModal.style.display = 'none';
+});
+
+newBookingBtn.addEventListener('click', function() {
+    bookingModal.style.display = 'none';
+    // إعادة تعيين النماذج
+    bookingForm.reset();
+    document.getElementById('cakeSelect').value = '';
+    document.getElementById('paymentReceipt').value = '';
+    paymentStep.style.display = 'none';
+    
+    // العودة إلى أعلى قسم الحجز
+    document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+});
+
+// إغلاق المودال بالنقر خارج المحتوى
+window.addEventListener('click', function(e) {
+    if (e.target === bookingModal) {
+        bookingModal.style.display = 'none';
     }
-  }
+});
+
+// **نموذج التواصل (تم إلغاء وظيفة التنبيه المحلية)**
+// الآن يتم إرساله مباشرة عبر Formspree
+// document.getElementById('messageForm').addEventListener('submit', function(e) { e.preventDefault(); alert('...'); this.reset(); });
+
+
+// تفعيل اختيار الكيك من البطاقات
+document.querySelectorAll('.cake-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const cakeName = this.getAttribute('data-cake');
+        const cakePrice = this.getAttribute('data-price');
+        const select = document.getElementById('cakeSelect');
+        const optionText = `${cakeName} - ${cakePrice} ريال`;
+        
+        // البحث عن الخيار المناسب
+        for (let option of select.options) {
+            if (option.text === optionText) {
+                option.selected = true;
+                break;
+            }
+        }
+        
+        // التمرير إلى قسم الحجز
+        document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+    });
+});
