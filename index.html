@@ -8,9 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </head>
 <body>
-    <!-- شريط التنقل -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">كيك رويالتي 👑</div>
@@ -19,20 +19,19 @@
                 <li class="nav-item"><a href="#about" class="nav-link">عن المحل</a></li>
                 <li class="nav-item"><a href="#cakes" class="nav-link">أنواع الكيك</a></li>
                 <li class="nav-item"><a href="#contact" class="nav-link">الحجز والاستفسارات</a></li>
+                <li class="nav-item"><a href="#booking" class="nav-link">حجز الآن</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- قسم الهيرو -->
     <section id="home" class="hero">
         <div class="hero-content">
             <h1>تجربة ملكية من أول قضمة</h1>
             <p>أجود أنواع الكيك الطازج يومياً، بتصاميم تناسب جميع المناسبات</p>
-            <a href="#cakes" class="cta-button">استعرض تشكيلتنا</a>
+            <a href="#booking" class="cta-button">احجز الآن</a>
         </div>
     </section>
 
-    <!-- قسم عن المحل -->
     <section id="about" class="about">
         <div class="container">
             <h2>عن كيك رويالتي</h2>
@@ -58,71 +57,122 @@
         </div>
     </section>
 
-    <!-- قسم أنواع الكيك -->
     <section id="cakes" class="cakes">
         <div class="container">
             <h2>تشكيلة الكيك المميزة</h2>
             <div class="cakes-grid">
-                <!-- كيك 1 -->
-                <div class="cake-card">
+                <div class="cake-card" data-cake="كيك الشوكولاتة البلجيكي" data-price="120">
                     <div class="cake-image" style="background-image: url('assets/images/cake1.jpg');"></div>
                     <div class="cake-info">
                         <h3>كيك الشوكولاتة البلجيكي</h3>
                         <p>شوكولاتة بلجيكية غنية تذوب في الفم، مع طبقات كريمة مخفوقة.</p>
+                        <span class="cake-price">120 ريال</span>
                     </div>
                 </div>
-                <!-- كيك 2 -->
-                <div class="cake-card">
+                <div class="cake-card" data-cake="كيك التوت الأحمر" data-price="110">
                     <div class="cake-image" style="background-image: url('assets/images/cake2.jpg');"></div>
                     <div class="cake-info">
                         <h3>كيك التوت الأحمر</h3>
                         <p>فانيلا عطرة مع طبقات من كريمة التوت الطازج.</p>
+                        <span class="cake-price">110 ريال</span>
                     </div>
                 </div>
-                <!-- كيك 3 -->
-                <div class="cake-card">
+                <div class="cake-card" data-cake="كيك اللوتس والكراميل" data-price="130">
                     <div class="cake-image" style="background-image: url('assets/images/cake3.jpg');"></div>
                     <div class="cake-info">
                         <h3>كيك اللوتس والكراميل</h3>
                         <p>مزيج ساحر من كريمة اللوتس والكراميل المملح.</p>
+                        <span class="cake-price">130 ريال</span>
                     </div>
                 </div>
-                <!-- كيك 4 -->
-                <div class="cake-card">
+                <div class="cake-card" data-cake="كيك الأوريو" data-price="115">
                     <div class="cake-image" style="background-image: url('assets/images/cake4.jpg');"></div>
                     <div class="cake-info">
                         <h3>كيك الأوريو</h3>
                         <p>لعشاق الأوريو، كيك شوكولاتة مع كريمة أوريو وقطع بسكويت.</p>
+                        <span class="cake-price">115 ريال</span>
                     </div>
                 </div>
-                <!-- كيك 5 -->
-                <div class="cake-card">
+                <div class="cake-card" data-cake="كيك الجبنة بالتوت" data-price="125">
                     <div class="cake-image" style="background-image: url('assets/images/cake5.jpg');"></div>
                     <div class="cake-info">
                         <h3>كيك الجبنة بالتوت</h3>
                         <p>كيك جبنة كريمي مع صلصة توت طازجة.</p>
+                        <span class="cake-price">125 ريال</span>
                     </div>
                 </div>
-                <!-- كيك 6 -->
-                <div class="cake-card">
+                <div class="cake-card" data-cake="كيك الفستق الإيطالي" data-price="140">
                     <div class="cake-image" style="background-image: url('assets/images/cake6.jpg');"></div>
                     <div class="cake-info">
                         <h3>كيك الفستق الإيطالي</h3>
                         <p>فستق إيطالي مميز مع طبقات من الكريمة المخفوقة.</p>
+                        <span class="cake-price">140 ريال</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- قسم التواصل -->
+    <section id="booking" class="booking">
+        <div class="container">
+            <h2>نظام الحجز والدفع</h2>
+            <div class="booking-steps">
+                <div class="step">
+                    <h3>1. اختر الكيك المطلوب</h3>
+                    <select id="cakeSelect" class="form-select">
+                        <option value="">-- اختر نوع الكيك --</option>
+                        <option value="كيك الشوكولاتة البلجيكي - 120 ريال">كيك الشوكولاتة البلجيكي - 120 ريال</option>
+                        <option value="كيك التوت الأحمر - 110 ريال">كيك التوت الأحمر - 110 ريال</option>
+                        <option value="كيك اللوتس والكراميل - 130 ريال">كيك اللوتس والكراميل - 130 ريال</option>
+                        <option value="كيك الأوريو - 115 ريال">كيك الأوريو - 115 ريال</option>
+                        <option value="كيك الجبنة بالتوت - 125 ريال">كيك الجبنة بالتوت - 125 ريال</option>
+                        <option value="كيك الفستق الإيطالي - 140 ريال">كيك الفستق الإيطالي - 140 ريال</option>
+                    </select>
+                </div>
+
+                <div class="step">
+                    <h3>2. أدخل بيانات الحجز</h3>
+                    <form id="bookingForm" class="booking-form" action="https://formspree.io/f/mlekrwnv" method="POST">
+                        <input type="hidden" name="_subject" value="طلب حجز جديد من الموقع">
+                        <input type="hidden" name="نوع الكيك" id="formCakeType">
+                        
+                        <input type="text" name="الاسم الكامل" id="customerName" placeholder="الاسم الكامل" required>
+                        <input type="tel" name="رقم الهاتف" id="customerPhone" placeholder="رقم الهاتف" required>
+                        <input type="email" name="_replyto" id="customerEmail" placeholder="البريد الإلكتروني (اختياري)">
+                        <textarea name="طلبات خاصة" id="specialRequests" placeholder="طلبات خاصة أو تفاصيل إضافية" rows="3"></textarea>
+                        
+                        <button type="submit" id="submitBookingDetails" class="cta-button">تابع إلى الدفع</button> 
+                    </form>
+                </div>
+
+                <div class="step" id="paymentStep" style="display: none;">
+                    <h3>3. الدفع عبر QR Code</h3>
+                    <div class="payment-info">
+                        <p>الرجاء مسح QR Code أدناه للدفع عبر تطبيق البنك:</p>
+                        <div id="qrcode"></div>
+                        <p class="iban-info">رقم الآيبان: <span id="ibanDisplay">SA63 0500 0068 2067 3395 8000</span></p>
+                        <button id="showIban" class="show-btn">إظهار/إخفاء رقم الآيبان</button>
+                        
+                        <div class="upload-section">
+                            <h4>بعد الدفع، رفق إيصال الدفع:</h4>
+                            <input type="file" id="paymentReceipt" accept="image/*,.pdf">
+                            <button id="submitBooking" class="cta-button">تأكيد الحجز</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="contact" class="contact">
         <div class="container">
             <h2>للحجز والاستفسارات</h2>
             <div class="contact-content">
                 <div class="contact-info">
-                    <h3>تواصل معنا على الرقم:</h3>
-                    <a href="tel:+966580422371" class="phone-number">+966 58 042 2371</a>
+                    <h3>تواصل معنا عبر واتساب:</h3>
+                    <a href="https://wa.me/966580422371" class="whatsapp-button" target="_blank">
+                        💬 اضغط هنا للتواصل عبر واتساب
+                    </a>
                     <p>نحن متواجدون 24/7 لخدمتكم وتلبية طلباتكم.</p>
                     <div class="contact-features">
                         <p>✓ خدمة التوصيل متاحة</p>
@@ -132,10 +182,11 @@
                 </div>
                 <div class="contact-form">
                     <h3>أرسل لنا رسالة</h3>
-                    <form id="messageForm">
-                        <input type="text" placeholder="اسمك" required>
-                        <input type="tel" placeholder="رقم هاتفك" required>
-                        <textarea placeholder="رسالتك أو طلبك الخاص..." rows="4" required></textarea>
+                    <form id="messageForm" action="https://formspree.io/f/mlekrwnv" method="POST">
+                        <input type="hidden" name="_subject" value="استفسار جديد من الموقع">
+                        <input type="text" name="الاسم" placeholder="اسمك" required>
+                        <input type="tel" name="رقم الهاتف" placeholder="رقم هاتفك" required>
+                        <textarea name="الرسالة" placeholder="رسالتك أو طلبك الخاص..." rows="4" required></textarea>
                         <button type="submit">إرسال الرسالة</button>
                     </form>
                 </div>
@@ -143,12 +194,20 @@
         </div>
     </section>
 
-    <!-- الفوتر -->
     <footer class="footer">
         <div class="container">
             <p>© 2024 كيك رويالتي - Cake Royale. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
+
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>تم تأكيد حجزك!</h3>
+            <p id="confirmationMessage"></p>
+            <button id="newBooking" class="cta-button">حجز جديد</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
